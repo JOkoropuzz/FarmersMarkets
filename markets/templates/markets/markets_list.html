@@ -1,0 +1,41 @@
+{% extends "markets/base_generic.html" %}
+{% load static %}
+{% block content %}
+    <h1>Markets List</h1>
+    <div class="order">
+        <p>Order by: <a
+                href="{{ request.path }}?page={{ page_obj.number }}&q={{ q }}&find_by={{ find_by }}{% if request.GET.sort_by == '-state' %}&sort_by=state{% else %}&sort_by=-state{% endif %}">state</a>
+            <a href="{{ request.path }}?page={{ page_obj.number }}&q={{ q }}&find_by={{ find_by }}{% if request.GET.sort_by == '-city' %}&sort_by=city{% else %}&sort_by=-city{% endif %}">city</a>
+        </p>
+    </div>
+    {% if markets_list %}
+        <ul>
+            {% for market in markets_list %}
+                <li>
+                    <a href="{{ market.get_absolute_url }}">{{ market.marketname }}</a>, {{ market.state }}, {{ market.city }}, {{ market.county }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no farmer markets in the database.</p>
+    {% endif %}
+    <div>
+        {% block pagination %}
+            {% if is_paginated %}
+                <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}&q={{ q }}&find_by={{ find_by }}&sort_by={{ request.GET.sort_by }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}&q={{ q }}&find_by={{ find_by }}&sort_by={{ request.GET.sort_by }}">next</a>
+                    {% endif %}
+                </span>
+                </div>
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

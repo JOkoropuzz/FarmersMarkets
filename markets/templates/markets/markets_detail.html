@@ -1,0 +1,19 @@
+{% extends "markets/base_generic.html" %}
+{% load static %}
+{% block content %}
+  <h1>Name: {{ markets.marketname }}</h1>
+  <p><strong>Street:</strong> {{ markets.street }}</p>
+  <p><strong>City:</strong> {{ markets.city }}</p>
+  <p><strong>State:</strong> {{ markets.state }}</p>
+  <p><strong>ZIP:</strong> {{ markets.zip }}</p>
+  <p><strong>Latitude:</strong> {{ markets.y }}</p>
+  <p><strong>Longitude:</strong> {{ markets.x }}</p>
+
+  <h4>Categories</h4>
+  <div style="margin-left:20px;margin-top:20px">
+    {% for category in markets.categories.all %}
+      <hr />
+      <p>{{ category.name }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

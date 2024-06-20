@@ -1,0 +1,18 @@
+{% extends "markets/base_generic.html" %}
+
+{% block title %}
+<title>Farmers Markets</title>
+{% endblock %}
+
+{% block content %}
+  <h1>Farmers Markets Home</h1>
+  <p>
+    Welcome to Farmers Markets, a Website developed for an
+    <em>RCOS Database Systems Demo</em>!
+  </p>
+  <h2>Summary</h2>
+  <p>The database has the following record counts:</p>
+  <ul>
+    <li><strong>Farmers Markets:</strong> {{ num_markets }}</li>
+  </ul>
+{% endblock %}
