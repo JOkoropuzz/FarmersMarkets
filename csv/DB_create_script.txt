@@ -1,0 +1,102 @@
+CREATE USER cargodbuser WITH PASSWORD 'n666787';
+
+CREATE DATABASE farmersmarkets WITH OWNER cargodbuser;
+
+CREATE TABLE markets (
+FMID CHAR(7),
+MarketName VARCHAR(255),
+Street VARCHAR(255),
+City VARCHAR(255),
+County VARCHAR(255),
+State VARCHAR(255),
+Zip VARCHAR(255),
+x float,
+y float,
+Location VARCHAR(255),
+updateTime VARCHAR(255),
+PRIMARY KEY (FMID) 
+);
+
+COPY markets(fmid, marketname, street, city, county, state, zip, x, y, location, updatetime)
+FROM '...\FarmersMarkets\farmersMarkets\csv\markets.csv'
+DELIMITER ',';
+
+CREATE TABLE socialmedia (
+name VARCHAR(255),
+PRIMARY KEY (name) 
+);
+
+INSERT INTO socialmedia VALUES ('Website'), ('Facebook'), ('Twitter'), ('Youtube'), ('Othermedia');
+
+CREATE TABLE markets_socialmedia (
+FMID CHAR(7),
+socialmedia VARCHAR(255),
+link VARCHAR(255),
+FOREIGN KEY (FMID) REFERENCES markets (FMID) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (socialmedia) REFERENCES socialmedia (name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+COPY markets_socialmedia(fmid, socialmedia, link)
+FROM '...\FarmersMarkets\farmersMarkets\csv\socialmedia.csv'
+DELIMITER ',';
+
+
+CREATE TABLE seasons (
+FMID CHAR(7),
+number integer,
+date VARCHAR(255),
+time VARCHAR(255),
+FOREIGN KEY (FMID) REFERENCES markets (FMID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+COPY seasons (fmid, number, date, time)
+FROM '...\FarmersMarkets\farmersMarkets\csv\seasons.csv'
+DELIMITER ',';
+
+CREATE TABLE payment (
+name VARCHAR(255),
+available boolean,
+PRIMARY KEY (name)
+);
+
+INSERT INTO payment VALUES ('Credit', True), ('WIC', True), ('WICcash', True), ('SFMNP', True), ('SNAP', True);
+
+CREATE TABLE markets_payment (
+FMID CHAR(7),
+payment VARCHAR(255),
+FOREIGN KEY (FMID) REFERENCES markets (FMID) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (payment) REFERENCES payment (name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+COPY markets_payment (FMID, payment)
+FROM '...\FarmersMarkets\farmersMarkets\csv\payment.csv'
+DELIMITER ',';
+
+
+CREATE TABLE categories (
+name VARCHAR(255),
+available boolean,
+PRIMARY KEY (name)
+);
+
+INSERT INTO categories VALUES ('Organic', True), ('Bakedgoods', True), ('Cheese', True), ('Crafts', True), ('Flowers', True),
+ ('Eggs', True), ('Seafood', True), ('Herbs', True), ('Vegetables', True), ('Honey', True), ('Jams', True), ('Maple', True), ('Meat', True), ('Nursery', True), ('Nuts', True), ('Plants', True), 
+ ('Poultry', True), ('Prepared', True), ('Soap', True), ('Trees', True), ('Wine', True), ('Coffee', True), ('Beans', True), ('Fruits', True), ('Grains', True), ('Juices', True), ('Mushrooms', True), ('PetFood', True), 
+ ('Tofu', True), ('WildHarvested', True);
+
+
+CREATE TABLE markets_categories (
+FMID CHAR(7),
+category VARCHAR(255),
+FOREIGN KEY (FMID) REFERENCES markets (FMID) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (category) REFERENCES categories (name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+COPY markets_categories (FMID, category)
+FROM '...\FarmersMarkets\farmersMarkets\csv\categories.csv'
+DELIMITER ',';
+
+UPDATE markets SET city = TRIM (city);
+UPDATE markets SET state = TRIM (state);
+UPDATE markets SET zip = TRIM (zip);
